@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Arrays;
 
 public class Banco {
@@ -101,5 +102,111 @@ public class Banco {
         } //for
         return  -1; // significa que no existe la cuenta con el número dado
     }
+    // Elimina una Cuenta de Ahorros a partir de su número de cuenta.
+    public void eliminarCuentaDeAhorros(String numCta) {
+        int posicionDeLaCuenta = this.buscarPosicionDeUnaCuenta(numCta);
+        String msj;
+        if(posicionDeLaCuenta == -1) {
+            msj = "No existe una cuenta con el número " + numCta;
+            JOptionPane.showMessageDialog(null, msj, "Error Eliminación", 0);
+            System.out.println(msj);
+            return; // SALGA del método.
+        }   // if
+        // La encontró y se procede a su eliminación:
+        for(int i = posicionDeLaCuenta; i < cantCtasDeAhorro - 1; i ++) {
+           cuentasDeAhorros[i] = cuentasDeAhorros[i + 1];
+        }   // for
+        cantCtasDeAhorro --;
+        indice = cantCtasDeAhorro;
+        msj = "Se ha eliminado la cuenta con el número " + numCta;
+        JOptionPane.showMessageDialog(null, msj, "Eliminación Exitosa", 1);
+        System.out.println(msj);
+    }   // void eliminarCuentaDeAhorros(String numCta)
+
+    // Método que determina y retorna el mayor saldo:
+    public double obtenerMayorSaldo(){
+        // Suponga que el mayor saldo lo tiene la primer cuenta:
+        double mayorSaldo = cuentasDeAhorros[0].getSaldo();
+        // Recorra el vector y compare el saldo actual con lo que
+        // hay en mayorSaldo:
+        for(int i = 1; i < cantCtasDeAhorro; i ++) {
+            if(cuentasDeAhorros[i].getSaldo() > mayorSaldo) {
+                // Actualice el mayor saldo:
+                mayorSaldo = cuentasDeAhorros[i].getSaldo();
+            }   // if
+        }   // for
+        return mayorSaldo;
+    }   // double obtenerMayorSaldo()
+
+    // Método que calcula y retorna el saldo promedio de las cuentas:
+    public double calcularSaldoPromedio() {
+        double suma = 0, saldoPromedio;
+        for(int i = 0; i < cantCtasDeAhorro; i ++) {
+            suma += cuentasDeAhorros[i].getSaldo();
+        }   // for
+        saldoPromedio = suma / cantCtasDeAhorro;
+        return saldoPromedio;
+    }   // double calcularSaldoPromedio()
+
+    // Método que construye y retorna un reporte especial, con los datos de las
+    // cuentas con saldos mayores o iguales que un saldo de referencia:
+    public String reporteEspecial(double saldoReferencia) {
+        String reporte = "Cuentas con Saldos mayores o iguales que $ " +
+                saldoReferencia + ":\n";
+        for(int i = 0; i < cantCtasDeAhorro; i ++) {
+            if(cuentasDeAhorros[i].getSaldo() >= saldoReferencia) {
+                // Concatene en el reporte los datos de esta cuenta:
+                reporte += cuentasDeAhorros[i].toString() + "\n";
+            }   // if
+        }   // for
+        return reporte;
+    }   // String reporteEspecial(double saldoReferencia)
+
+    // Abonar por Superávit
+    public void abonarPorSuperavit(double abono) {
+        if(abono <= 0) return;
+        double saldoActual;
+        for(int i = 0; i < cantCtasDeAhorro; i ++) {
+            saldoActual = cuentasDeAhorros[i].getSaldo();
+            cuentasDeAhorros[i].setSaldo(saldoActual + abono);
+        }   // for
+    }   // void abonarPorSuperAavit(double abono)
+
+    // Método de ordenamiento BURBUJA para ordenar las cuentas por los titulares:
+    public void ordenarPorTitular() {
+        String titular1, titular2;
+        CuentaAhorros auxi;
+        for(int i = 0; i < cantCtasDeAhorro - 1; i ++) {
+            for(int j = 0; j < cantCtasDeAhorro - 1 - i; j ++) {
+                titular1 = cuentasDeAhorros[j].getTitular();
+                titular2 = cuentasDeAhorros[j + 1].getTitular();
+                if(titular1.compareTo(titular2) > 0) {
+                    // Intercambie de posición las cuentas:
+                    auxi = cuentasDeAhorros[j];
+                    cuentasDeAhorros[j] = cuentasDeAhorros[j + 1];
+                    cuentasDeAhorros[j + 1] = auxi;
+                }   // if
+            }   // for j
+        }   // for i
+    }   // void ordenarPorTitular()
+
+    // Método de ordenamiento BURBUJA para ordenar las cuentas por los
+    // saldos del mayor al menor:
+    public void ordenarPorSaldo() {
+        double saldo1, saldo2;
+        CuentaAhorros auxi;
+        for(int i = 0; i < cantCtasDeAhorro - 1; i ++) {
+            for(int j = 0; j < cantCtasDeAhorro - 1 - i; j ++) {
+                saldo1 = cuentasDeAhorros[j].getSaldo();
+                saldo2 = cuentasDeAhorros[j + 1].getSaldo();
+                if(saldo1 < saldo2) {
+                    // Intercambie de posición las cuentas:
+                    auxi = cuentasDeAhorros[j];
+                    cuentasDeAhorros[j] = cuentasDeAhorros[j + 1];
+                    cuentasDeAhorros[j + 1] = auxi;
+                }   // if
+            }   // for j
+        }   // for i
+    }   // void ordenarPorSaldo()
 
 }
