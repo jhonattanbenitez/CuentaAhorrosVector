@@ -103,14 +103,14 @@ public class Banco {
         return  -1; // significa que no existe la cuenta con el número dado
     }
     // Elimina una Cuenta de Ahorros a partir de su número de cuenta.
-    public void eliminarCuentaDeAhorros(String numCta) {
+    public String eliminarCuentaDeAhorros(String numCta) {
         int posicionDeLaCuenta = this.buscarPosicionDeUnaCuenta(numCta);
         String msj;
         if(posicionDeLaCuenta == -1) {
             msj = "No existe una cuenta con el número " + numCta;
             JOptionPane.showMessageDialog(null, msj, "Error Eliminación", 0);
             System.out.println(msj);
-            return; // SALGA del método.
+            return msj; // SALGA del método.
         }   // if
         // La encontró y se procede a su eliminación:
         for(int i = posicionDeLaCuenta; i < cantCtasDeAhorro - 1; i ++) {
@@ -121,6 +121,7 @@ public class Banco {
         msj = "Se ha eliminado la cuenta con el número " + numCta;
         JOptionPane.showMessageDialog(null, msj, "Eliminación Exitosa", 1);
         System.out.println(msj);
+        return msj;
     }   // void eliminarCuentaDeAhorros(String numCta)
 
     // Método que determina y retorna el mayor saldo:
